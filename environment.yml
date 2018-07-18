@@ -1,0 +1,18 @@
+name: mlflow-env
+channels:
+  - defaults
+  - conda-forge
+dependencies:
+  - python
+  - pip
+  - pyyaml
+  - numpy
+  - pandas
+  - nomkl  # MKL makes the image ~800mb larger with little performance benefit
+  - scikit-learn
+  - jupyter
+  - pip:
+    - sklearn-pandas
+    - pandas_profiling
+    - mlflow
+
