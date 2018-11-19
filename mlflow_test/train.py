@@ -5,15 +5,22 @@
 import os
 import warnings
 import sys
+import os
+from pathlib import Path
 
 import pandas as pd
 import numpy as np
+
 from sklearn.metrics import mean_squared_error, mean_absolute_error, r2_score
 from sklearn.model_selection import train_test_split
 from sklearn.linear_model import ElasticNet
 
 import mlflow
 import mlflow.sklearn
+
+
+DATA_DIR = Path(__file__).resolve().parents[1] / "data" / "wine-quality.csv"
+EXPERIMENT = "Default"
 
 
 def eval_metrics(actual, pred):
@@ -23,14 +30,12 @@ def eval_metrics(actual, pred):
     return rmse, mae, r2
 
 
-
 if __name__ == "__main__":
     warnings.filterwarnings("ignore")
     np.random.seed(40)
 
     # Read the wine-quality csv file (make sure you're running this from the root of MLflow!)
-    wine_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), "../data/wine-quality.csv")
-    data = pd.read_csv(wine_path)
+    data = pd.read_csv(DATA_DIR)
 
     # Split the data into training and test sets. (0.75, 0.25) split.
     train, test = train_test_split(data)
@@ -43,6 +48,8 @@ if __name__ == "__main__":
 
     alpha = float(sys.argv[1]) if len(sys.argv) > 1 else 0.5
     l1_ratio = float(sys.argv[2]) if len(sys.argv) > 2 else 0.5
+
+    mlflow.set_experiment(EXPERIMENT)
 
     with mlflow.start_run():
         lr = ElasticNet(alpha=alpha, l1_ratio=l1_ratio, random_state=42)

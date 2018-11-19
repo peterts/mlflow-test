@@ -109,4 +109,4 @@ venv.bak/
 .idea/
 
 # Generated files
-mlflow_test/mlruns/
+mlflow/
